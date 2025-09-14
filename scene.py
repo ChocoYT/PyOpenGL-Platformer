@@ -4,7 +4,6 @@ from OpenGL.GL import *
 from camera   import Camera2D
 from mesh     import Mesh
 from program  import Program
-from settings import *
 
 class Scene:
     def __init__(self):
@@ -60,8 +59,8 @@ class Scene:
             v0, v1 = v1, v0  # Flip Image
 
             # Quad Positions
-            x0, y0 = x_world * SCREEN_SCALE, y_world * SCREEN_SCALE
-            x1, y1 = x0      + SCREEN_SCALE, y0      + SCREEN_SCALE
+            x0, y0 = x_world, y_world
+            x1, y1 = x0 + 1,  y0 + 1
 
             quad_vertices = [
                 ((x0, y0, z_world), (u0, v0, float(layer))),

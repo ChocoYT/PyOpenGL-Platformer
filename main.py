@@ -58,7 +58,7 @@ def main():
     frames = 0
     
     render_program.use()
-    glUniform1f(glGetUniformLocation(render_program.ID, "scale"), 32)
+    glUniform1f(glGetUniformLocation(render_program.ID, "scale"), SCREEN_SCALE)
 
     # Main Loop
     while not glfw.window_should_close(window):
