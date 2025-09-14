@@ -1,13 +1,15 @@
 #version 460 core
 
+layout (binding = 0) uniform sampler2DArray texArray;
+
 in vec3 VertexPosition;
-in vec2 TexCoord;
+in vec3 TexCoord;
 
 out vec4 FragColor;
 
 void main()
 {
-    vec3 color = vec3(1.0, 0.0, 0.0);
-
-    FragColor = vec4(color, 1.0);
+    vec4 texCol = texture(texArray, TexCoord);
+    
+    FragColor = texCol;
 }

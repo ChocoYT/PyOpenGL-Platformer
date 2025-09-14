@@ -12,7 +12,7 @@ class Mesh:
             indices
         ) -> None:
         """
-        Vertices: List of Tuples ((x, y, z), (u, v))
+        Vertices: List of Tuples ((x, y, z), (u, v, l))
         Indices:  List of Integers
         """
         self.vertices = vertices
@@ -44,11 +44,11 @@ class Mesh:
         self.EBO0.bind()
         self.EBO0.sendData(index_data, index_data.nbytes)
 
-        stride = 5 * 4  # 5 Floats per Vertex (4 Bytes each)
+        stride = 6 * 4  # 6 Floats per Vertex (4 Bytes each)
 
         # Set Attributes
         self.VAO0.setAttribute(0, 3, GL_FLOAT, stride, 0)      # Position (vec3)
-        self.VAO0.setAttribute(1, 2, GL_FLOAT, stride, 3 * 4)  # UVs      (vec2)
+        self.VAO0.setAttribute(1, 3, GL_FLOAT, stride, 3 * 4)  # UVs      (vec3)
 
         self.VBO0.unbind()
 

@@ -1,10 +1,8 @@
 import glfw
 from OpenGL.GL import *
-import glm
 
 from camera   import Camera2D
 from loader   import load_assets
-from mesh     import Mesh
 from program  import Program
 from scene    import Scene
 from settings import *
@@ -45,22 +43,12 @@ def main():
 
     # Compile Render Program
     render_program = Program.create_vertex_fragment("Shaders/render.vert", "Shaders/render.frag")
-
-    # Initialize
-    vertices = [
-        ((0.0, 0.0, 0.0), (0.0, 0.0)),
-        ((1.0, 0.0, 0.0), (1.0, 0.0)),
-        ((1.0, 1.0, 0.0), (0.0, 1.0)),
-        ((0.0, 1.0, 0.0), (1.0, 1.0)),
-    ]
-    indices = [
-        0, 1, 2,
-        2, 3, 0
-    ]
     
+    # Initialize
     camera = Camera2D(window)
-    mesh   = Mesh(vertices, indices)
     scene  = Scene()
+    
+    scene.add_tile(0, 0, 0, "Grass")
 
     # Timing
     current_time = glfw.get_time()
@@ -88,11 +76,9 @@ def main():
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
 
             camera.update(window, dt)
-
-            render_program.use()
-            glUniformMatrix4fv(glGetUniformLocation(render_program.ID, "projMatrix"), 1, GL_FALSE, glm.value_ptr(camera.get_proj()))
-            glUniformMatrix4fv(glGetUniformLocation(render_program.ID, "viewMatrix"), 1, GL_FALSE, glm.value_ptr(camera.get_view()))
-            mesh.draw()
+            
+            scene.update(dt)
+            scene.draw(camera, render_program)
 
             glfw.swap_buffers(window)
 
@@ -100,7 +86,7 @@ def main():
             frames += 1
 
     # Cleanup
-    mesh.destroy()
+    scene.destroy()
     render_program.destroy()
     
     glfw.terminate()
