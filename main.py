@@ -6,6 +6,7 @@ from camera   import Camera2D
 from loader   import load_assets
 from mesh     import Mesh
 from program  import Program
+from scene    import Scene
 from settings import *
 
 def framebuffer_size_callback(window, width, height):
@@ -59,6 +60,7 @@ def main():
     
     camera = Camera2D(window)
     mesh   = Mesh(vertices, indices)
+    scene  = Scene()
 
     # Timing
     current_time = glfw.get_time()

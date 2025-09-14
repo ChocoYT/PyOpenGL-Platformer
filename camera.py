@@ -1,5 +1,4 @@
-import glfw
-import glm
+import glfw, glm
 from typing import Union
 
 from settings import *

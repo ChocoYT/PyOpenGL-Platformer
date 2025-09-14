@@ -1,5 +1,5 @@
-from OpenGL.GL import *
 import sys
+from OpenGL.GL import *
 
 from shader import Shader
 

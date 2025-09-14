@@ -1,5 +1,5 @@
-from OpenGL.GL import *
 import sys
+from OpenGL.GL import *
 
 class Shader:
     def __init__(self, path, shader_type):

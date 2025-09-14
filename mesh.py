@@ -1,5 +1,5 @@
-from OpenGL.GL import *
 import numpy as np
+from OpenGL.GL import *
 
 from Buffers.VAO import VAO
 from Buffers.VBO import VBO

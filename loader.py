@@ -1,25 +1,49 @@
-from PIL import Image
+import json, os
+from PIL       import Image
 from OpenGL.GL import *
-import os
 
-from texture import Texture
+from texture_array import TextureArray
 
-def load_directory(directory: str) -> dict:
-    assets = {}
+def load_directory(root: str) -> dict:
+    image_paths = []
 
-    for entry in os.listdir(directory):
-        full_path = os.path.join(directory, entry)
-        
-        if os.path.isdir(full_path):
-            assets[entry] = load_directory(full_path)
-            continue
-        elif os.path.isfile(full_path) and can_load(full_path):
-            try:
-                assets[entry] = Texture(full_path)
-            except Exception as e:
-                print(f"Failed to Load {full_path}: {e}")
+    meta = {}
 
-    return assets
+    for current_dir, _, files in os.walk(root):
+        for file in files:
+            full_path = os.path.join(current_dir, file)
+            ext       = os.path.splitext(file)[1].lower()
+
+            # Collect Images
+            if ext == ".png" and can_load(full_path):
+                image_paths.append(full_path)
+
+            # Collect JSON Metadata
+            elif ext == ".json":
+                with open(full_path, "r") as f:
+                    data = json.load(f)
+
+                    # Tiles
+                    if "tiles" in data:
+                        if meta.get("tiles") is None:
+                            meta["tiles"] = {}
+                            
+                        for name, coords in data["tiles"].items():
+                            meta["tiles"][name] = coords
+                    
+                    # Tile Size
+                    if "tile_size" in data:
+                        if meta.get("tile_size") is None:
+                            meta["tile_size"] = data["tile_size"]
+                        elif meta["tile_size"] != data["tile_size"]:
+                            print(f"Warning: Tile size mismatch in {file}")
+
+    textures = TextureArray(image_paths)
+
+    return {
+        "textures": textures,
+        "meta": meta
+    }
 
 def can_load(path: str) -> bool:
     try:
